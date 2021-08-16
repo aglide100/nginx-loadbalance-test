@@ -1,0 +1,45 @@
+version: "3.5"
+x-services-volume: &services-volume
+  type: bind
+
+services:
+  loadbalancer:
+    container_name: nginx
+    build:
+      context: ./nginx
+    restart: always
+    hostname: nginx
+    networks:
+      - docker_network
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+      - /home/data/certbot/www:/var/www/certbot
+    environment:
+      PrimaryDomain: ${PrimaryDomain}
+  primarynode:
+    container_name: primary
+    image: [put here image uri]
+    hostname: primarynode
+    networks:
+      - docker_network
+    expose:
+      - 80
+  secondarynode:
+    container_name: edge
+    image: [put here image uri]
+    hostname: secondarynode
+    networks:
+      - docker_network
+    expose:
+      - 80
+
+networks:
+  docker_network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "true"
+    ipam:
+      driver: default
