@@ -19,22 +19,22 @@ services:
       - /home/data/certbot/www:/var/www/certbot
     environment:
       PrimaryDomain: ${PrimaryDomain}
-  stable:
-    container_name: stable
+  primarynode:
+    container_name: primary
     image: aglide100/ds-landing-page:latest
-    hostname: stable
+    hostname: primarynode
     networks:
       - docker_network
     expose:
-      - 80
-  edge:
+      - 3000
+  secondarynode:
     container_name: edge
     image: aglide100/ds-landing-page:1.0
-    hostname: edge
+    hostname: secondarynode
     networks:
       - docker_network
     expose:
-      - 80
+      - 3000
 
 networks:
   docker_network:
